@@ -1,0 +1,9 @@
+python-dotenv
+langchain_chroma
+azure-storage-blob==12.12.0
+requests
+beautifulsoup4
+pandas
+langchain
+chromadb
+openai

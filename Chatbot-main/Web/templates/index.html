@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Canvas-Chatbot</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/favicon.png') }}">
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script>
+    marked.setOptions({ breaks: true });
+  </script>
+  
+</head>
+
+<body>
+  <button id="open-chat" class="chatbot-toggle" aria-label="Open chatbot" aria-haspopup="dialog">
+    <span class="button-text">Need Help?<br>Ask Felix!</span>
+  </button>
+
+  <div id="chatbot" class="chatbot-container hidden" role="dialog" aria-labelledby="chatbot-title" aria-modal="true">
+    <div class="chatbot-header">
+      <img src="{{ url_for('static', filename='images/chatbot avtar.png') }}" alt="Chatbot Avatar" class="chatbot-avatar">
+      <span id="chatbot-title" class="chatbot-title">Felix – Your Canvas Assistant</span>
+      <button id="close-chat" class="close-chat" aria-label="Close chatbot">X</button>
+    </div>
+
+    <div class="chatbot-body" id="chat-window" aria-live="polite" tabindex="0">
+      <div class="message bot">
+        Hello, I'm Felix. Welcome to Yeshiva University's Canvas Help Assistant!<br>
+        I'm here to assist you with all your questions related to Canvas — including assignments, deadlines,
+        notifications, courses, and more.
+        <p>Type your question below to get help.</p>
+
+        <div class="sample-questions">
+          <p><strong>Need ideas? Try asking:</strong></p>
+          <ul>
+            <li><a href="#" onclick="askSample('How can I find my Canvas course schedule?')">How can I find my Canvas course schedule?</a></li>
+            <li><a href="#" onclick="askSample('Where do I submit my assignments on Canvas?')">Where do I submit my assignments on Canvas?</a></li>
+            <li><a href="#" onclick="askSample('How do I access grades and feedback?')">How do I access grades and feedback?</a></li>
+            <li><a href="#" onclick="askSample('Who do I contact for Canvas technical support?')">Who do I contact for Canvas technical support?</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="chatbot-loader" id="loader" style="display: none;" aria-hidden="true">
+      <span></span><span></span><span></span>
+    </div>
+
+    <div class="chatbot-footer">
+      <label for="doc-upload" class="icon-button" title="Upload a document">➕</label>
+      <input type="file" id="doc-upload" accept=".pdf,.docx,.txt" style="display: none;" />
+
+      <button id="mic-button" class="icon-button" title="Speak your question" aria-label="Voice input">🎤</button>
+
+      <input type="text" id="user-input" class="chatbot-input" placeholder="Type or speak your question..." aria-label="Your message">
+
+      <button id="send-button" class="chatbot-send" aria-label="Send message">Send</button>
+    </div>
+
+    <div class="chatbot-disclaimer" role="note">
+      This chatbot is in testing and development. Responses may vary, and occasional mistakes can occur as we refine it.
+    </div>
+  </div>
+
+  <script>
+    const chatContainer = document.getElementById('chatbot');
+    const openButton = document.getElementById('open-chat');
+    const closeButton = document.getElementById('close-chat');
+    const inputField = document.getElementById('user-input');
+    const chatWindow = document.getElementById('chat-window');
+    const loader = document.getElementById('loader');
+    const micButton = document.getElementById('mic-button');
+
+    let chatHistory = [];
+
+    openButton.addEventListener('click', () => {
+      chatContainer.classList.remove('hidden');
+      openButton.setAttribute('aria-expanded', 'true');
+      openButton.style.display = 'none';
+      inputField.focus();
+    });
+
+    closeButton.addEventListener('click', () => {
+      chatContainer.classList.add('hidden');
+      openButton.setAttribute('aria-expanded', 'false');
+      openButton.style.display = 'block';
+      openButton.focus();
+    });
+
+    document.getElementById('send-button').addEventListener('click', sendMessage);
+    inputField.addEventListener('keypress', function (e) {
+      if (e.key === 'Enter') sendMessage();
+    });
+
+    async function sendMessage() {
+      const userInput = inputField.value.trim();
+      if (!userInput) return;
+      inputField.value = '';
+      displayMessage(userInput, 'user');
+      loader.style.display = 'flex';
+
+      try {
+        const response = await fetch('/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            message: userInput,
+            history: chatHistory.map(msg => [msg.content, msg.type === 'bot' ? msg.content : '']),
+          })
+        });
+
+        const data = await response.json();
+        loader.style.display = 'none';
+
+        if (data.response) {
+          chatHistory.push({ content: userInput, type: 'user' });
+          chatHistory.push({ content: data.response, type: 'bot' });
+          displayMessage(data.response, 'bot');
+        } else {
+          displayMessage('Error: ' + (data.error || 'Unknown error'), 'bot');
+        }
+      } catch (err) {
+        loader.style.display = 'none';
+        displayMessage('Error: Unable to reach the server.', 'bot');
+        console.error(err);
+      }
+    }
+
+    async function handleFileUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const formData = new FormData();
+      formData.append('file', file);
+
+      loader.style.display = 'flex';
+
+      try {
+        const response = await fetch('/upload_review', {
+          method: 'POST',
+          body: formData
+        });
+
+        const data = await response.json();
+        loader.style.display = 'none';
+
+        if (data.response) {
+          displayMessage("Here's your document review:", 'bot');
+          displayMessage(data.response, 'bot');
+        } else {
+          displayMessage("Error: " + (data.error || "Unknown error"), "bot");
+        }
+      } catch (err) {
+        loader.style.display = 'none';
+        displayMessage("Error uploading file.", "bot");
+        console.error(err);
+      }
+    }
+
+    document.getElementById('doc-upload').addEventListener('change', handleFileUpload);
+
+    function displayMessage(message, sender) {
+      const messageElement = document.createElement('div');
+      messageElement.classList.add('message', sender);
+
+      if (sender === 'bot') {
+        const parsedMarkdown = marked.parse(message);
+        const linksWithTargetBlank = parsedMarkdown.replace(/<a /g, '<a target="_blank" rel="noopener noreferrer" ');
+        messageElement.innerHTML = linksWithTargetBlank;
+      } else {
+        messageElement.textContent = message;
+      }
+
+      chatWindow.appendChild(messageElement);
+      chatWindow.scrollTop = chatWindow.scrollHeight;
+    }
+
+    function askSample(question) {
+      inputField.value = question;
+      sendMessage();
+    }
+
+    // 🎤 Mic speech-to-text
+    micButton.addEventListener('click', () => {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecognition) {
+        alert("Speech recognition not supported in this browser.");
+        return;
+      }
+
+      const recognition = new SpeechRecognition();
+      recognition.lang = 'auto'; // Language auto-detection
+      recognition.interimResults = false;
+      recognition.maxAlternatives = 1;
+
+      recognition.start();
+      micButton.textContent = '⏺️';
+
+      recognition.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        inputField.value = transcript;
+        micButton.textContent = '🎤';
+        sendMessage();
+      };
+
+      recognition.onerror = (e) => {
+        console.error("Speech recognition error:", e);
+        micButton.textContent = '🎤';
+        alert("Could not understand your voice. Try again.");
+      };
+
+      recognition.onend = () => {
+        micButton.textContent = '🎤';
+      };
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,684 @@
+{
+  "version": 4,
+  "terraform_version": "1.9.8",
+  "serial": 81,
+  "lineage": "7b514505-41d4-e4f8-f169-2ed98ec1885b",
+  "outputs": {},
+  "resources": [
+    {
+      "module": "module.communication_email_service",
+      "mode": "managed",
+      "type": "azurerm_email_communication_service",
+      "name": "azurerm_email_communication_service",
+      "provider": "provider[\"registry.terraform.io/hashicorp/azurerm\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "data_location": "United States",
+            "id": "/subscriptions/cb4efa9d-9e95-4dbd-b4f9-908d51482781/resourceGroups/sgc-dataWarehouse-rg-dev/providers/Microsoft.Communication/emailServices/sgc-dataWarehouse-email-comm-dev",
+            "name": "sgc-dataWarehouse-email-comm-dev",
+            "resource_group_name": "sgc-dataWarehouse-rg-dev",
+            "tags": {},
+            "timeouts": null
+          },
+          "sensitive_attributes": [],
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjoxODAwMDAwMDAwMDAwLCJkZWxldGUiOjE4MDAwMDAwMDAwMDAsInJlYWQiOjMwMDAwMDAwMDAwMCwidXBkYXRlIjoxODAwMDAwMDAwMDAwfX0="
+        }
+      ]
+    },
+    {
+      "module": "module.communication_service",
+      "mode": "managed",
+      "type": "azurerm_communication_service",
+      "name": "azurerm_communication_service",
+      "provider": "provider[\"registry.terraform.io/hashicorp/azurerm\"]",
+      "instances": [
+        {
+          "schema_version": 1,
+          "attributes": {
+            "data_location": "United States",
+            "id": "/subscriptions/cb4efa9d-9e95-4dbd-b4f9-908d51482781/resourceGroups/sgc-dataWarehouse-rg-dev/providers/Microsoft.Communication/communicationServices/sgc-dataWarehouse-communication-dev",
+            "name": "sgc-dataWarehouse-communication-dev",
+            "primary_connection_string": "endpoint=https://sgc-datawarehouse-communication-dev.unitedstates.communication.azure.com/;accesskey=4vwncyJd86XKxvXHUtLXj1BH3piietDyp3XbeyOEmEQAedzRpn6nJQQJ99ALACULyCpR5I22AAAAAZCSJQqe",
+            "primary_key": "4vwncyJd86XKxvXHUtLXj1BH3piietDyp3XbeyOEmEQAedzRpn6nJQQJ99ALACULyCpR5I22AAAAAZCSJQqe",
+            "resource_group_name": "sgc-dataWarehouse-rg-dev",
+            "secondary_connection_string": "endpoint=https://sgc-datawarehouse-communication-dev.unitedstates.communication.azure.com/;accesskey=824uJaAmsdCHbbI8B0hhE0emnJYT1Q3fKxOV7ON7jOYeML7XCRXkJQQJ99ALACULyCpR5I22AAAAAZCSZbIR",
+            "secondary_key": "824uJaAmsdCHbbI8B0hhE0emnJYT1Q3fKxOV7ON7jOYeML7XCRXkJQQJ99ALACULyCpR5I22AAAAAZCSZbIR",
+            "tags": {},
+            "timeouts": null
+          },
+          "sensitive_attributes": [
+            [
+              {
+                "type": "get_attr",
+                "value": "secondary_connection_string"
+              }
+            ],
+            [
+              {
+                "type": "get_attr",
+                "value": "primary_connection_string"
+              }
+            ],
+            [
+              {
+                "type": "get_attr",
+                "value": "primary_key"
+              }
+            ],
+            [
+              {
+                "type": "get_attr",
+                "value": "secondary_key"
+              }
+            ]
+          ],
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjoxODAwMDAwMDAwMDAwLCJkZWxldGUiOjE4MDAwMDAwMDAwMDAsInJlYWQiOjMwMDAwMDAwMDAwMCwidXBkYXRlIjoxODAwMDAwMDAwMDAwfSwic2NoZW1hX3ZlcnNpb24iOiIxIn0="
+        }
+      ]
+    },
+    {
+      "module": "module.key_vault",
+      "mode": "managed",
+      "type": "azurerm_key_vault",
+      "name": "azurerm_key_vault",
+      "provider": "provider[\"registry.terraform.io/hashicorp/azurerm\"]",
+      "instances": [
+        {
+          "status": "tainted",
+          "schema_version": 2,
+          "attributes": {
+            "access_policy": [],
+            "contact": [],
+            "enable_rbac_authorization": false,
+            "enabled_for_deployment": false,
+            "enabled_for_disk_encryption": false,
+            "enabled_for_template_deployment": false,
+            "id": "/subscriptions/cb4efa9d-9e95-4dbd-b4f9-908d51482781/resourceGroups/sgc-dataWarehouse-rg-dev/providers/Microsoft.KeyVault/vaults/sgc-dw-kv-dev",
+            "location": "canadacentral",
+            "name": "sgc-dw-kv-dev",
+            "network_acls": [
+              {
+                "bypass": "AzureServices",
+                "default_action": "Allow",
+                "ip_rules": [],
+                "virtual_network_subnet_ids": []
+              }
+            ],
+            "public_network_access_enabled": true,
+            "purge_protection_enabled": false,
+            "resource_group_name": "sgc-dataWarehouse-rg-dev",
+            "sku_name": "standard",
+            "soft_delete_retention_days": 90,
+            "tags": null,
+            "tenant_id": "21de4c1f-b79a-45e9-9db5-a61813f37d4b",
+            "timeouts": null,
+            "vault_uri": "https://sgc-dw-kv-dev.vault.azure.net/"
+          },
+          "sensitive_attributes": [],
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjoxODAwMDAwMDAwMDAwLCJkZWxldGUiOjE4MDAwMDAwMDAwMDAsInJlYWQiOjMwMDAwMDAwMDAwMCwidXBkYXRlIjoxODAwMDAwMDAwMDAwfSwic2NoZW1hX3ZlcnNpb24iOiIyIn0=",
+          "dependencies": [
+            "module.resource_group.azurerm_resource_group.azurerm_resource_group"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.postgresql_flexible_server",
+      "mode": "managed",
+      "type": "azurerm_postgresql_flexible_server",
+      "name": "azurerm_postgresql_flexible_server",
+      "provider": "provider[\"registry.terraform.io/hashicorp/azurerm\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "administrator_login": "psqladmin",
+            "administrator_password": "careercenterDEV!yeshiva01",
+            "authentication": [
+              {
+                "active_directory_auth_enabled": false,
+                "password_auth_enabled": true,
+                "tenant_id": ""
+              }
+            ],
+            "auto_grow_enabled": false,
+            "backup_retention_days": 7,
+            "create_mode": null,
+            "customer_managed_key": [],
+            "delegated_subnet_id": "/subscriptions/cb4efa9d-9e95-4dbd-b4f9-908d51482781/resourceGroups/sgc-dataWarehouse-rg-dev/providers/Microsoft.Network/virtualNetworks/sgc-dataWarehouse-vnet-dev/subnets/sgc-dataWarehouse-subnet-dev",
+            "fqdn": "sgc-datawarehouse-psqlflexibleserver-dev.postgres.database.azure.com",
+            "geo_redundant_backup_enabled": false,
+            "high_availability": [],
+            "id": "/subscriptions/cb4efa9d-9e95-4dbd-b4f9-908d51482781/resourceGroups/sgc-dataWarehouse-rg-dev/providers/Microsoft.DBforPostgreSQL/flexibleServers/sgc-datawarehouse-psqlflexibleserver-dev",
+            "identity": [],
+            "location": "canadacentral",
+            "maintenance_window": [],
+            "name": "sgc-datawarehouse-psqlflexibleserver-dev",
+            "point_in_time_restore_time_in_utc": null,
+            "private_dns_zone_id": "/subscriptions/cb4efa9d-9e95-4dbd-b4f9-908d51482781/resourceGroups/sgc-dataWarehouse-rg-dev/providers/Microsoft.Network/privateDnsZones/sgc-datawarehouse-privatednszone-dev.postgres.database.azure.com",
+            "public_network_access_enabled": false,
+            "replication_role": "",
+            "resource_group_name": "sgc-dataWarehouse-rg-dev",
+            "sku_name": "GP_Standard_D4s_v3",
+            "source_server_id": null,
+            "storage_mb": 32768,
+            "storage_tier": "P4",
+            "tags": {},
+            "timeouts": null,
+            "version": "12",
+            "zone": ""
+          },
+          "sensitive_attributes": [
+            [
+              {
+                "type": "get_attr",
+                "value": "administrator_password"
+              }
+            ]
+          ],
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjozNjAwMDAwMDAwMDAwLCJkZWxldGUiOjM2MDAwMDAwMDAwMDAsInJlYWQiOjMwMDAwMDAwMDAwMCwidXBkYXRlIjozNjAwMDAwMDAwMDAwfX0=",
+          "dependencies": [
+            "module.private_dns_zone.azurerm_private_dns_zone.azurerm_private_dns_zone",
+            "module.resource_group.azurerm_resource_group.azurerm_resource_group",
+            "module.subnet.azurerm_subnet.azurerm_subnet",
+            "module.vnet.azurerm_virtual_network.azurerm_virtual_network"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.postgresql_flexible_server_db",
+      "mode": "managed",
+      "type": "azurerm_postgresql_flexible_server_database",
+      "name": "azurerm_postgresql_flexible_server_database",
+      "provider": "provider[\"registry.terraform.io/hashicorp/azurerm\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "charset": "UTF8",
+            "collation": "en_US.utf8",
+            "id": "/subscriptions/cb4efa9d-9e95-4dbd-b4f9-908d51482781/resourceGroups/sgc-dataWarehouse-rg-dev/providers/Microsoft.DBforPostgreSQL/flexibleServers/sgc-datawarehouse-psqlflexibleserver-dev/databases/sgc-fv-psqlflexibleserver-dev",
+            "name": "sgc-fv-psqlflexibleserver-dev",
+            "server_id": "/subscriptions/cb4efa9d-9e95-4dbd-b4f9-908d51482781/resourceGroups/sgc-dataWarehouse-rg-dev/providers/Microsoft.DBforPostgreSQL/flexibleServers/sgc-datawarehouse-psqlflexibleserver-dev",
+            "timeouts": null
+          },
+          "sensitive_attributes": [],
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjoxODAwMDAwMDAwMDAwLCJkZWxldGUiOjE4MDAwMDAwMDAwMDAsInJlYWQiOjMwMDAwMDAwMDAwMH19",
+          "dependencies": [
+            "module.postgresql_flexible_server.azurerm_postgresql_flexible_server.azurerm_postgresql_flexible_server",
+            "module.private_dns_zone.azurerm_private_dns_zone.azurerm_private_dns_zone",
+            "module.resource_group.azurerm_resource_group.azurerm_resource_group",
+            "module.subnet.azurerm_subnet.azurerm_subnet",
+            "module.vnet.azurerm_virtual_network.azurerm_virtual_network"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.private_dns_zone",
+      "mode": "managed",
+      "type": "azurerm_private_dns_zone",
+      "name": "azurerm_private_dns_zone",
+      "provider": "provider[\"registry.terraform.io/hashicorp/azurerm\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "id": "/subscriptions/cb4efa9d-9e95-4dbd-b4f9-908d51482781/resourceGroups/sgc-dataWarehouse-rg-dev/providers/Microsoft.Network/privateDnsZones/sgc-datawarehouse-privatednszone-dev.postgres.database.azure.com",
+            "max_number_of_record_sets": 25000,
+            "max_number_of_virtual_network_links": 1000,
+            "max_number_of_virtual_network_links_with_registration": 100,
+            "name": "sgc-datawarehouse-privatednszone-dev.postgres.database.azure.com",
+            "number_of_record_sets": 2,
+            "resource_group_name": "sgc-dataWarehouse-rg-dev",
+            "soa_record": [
+              {
+                "email": "azureprivatedns-host.microsoft.com",
+                "expire_time": 2419200,
+                "fqdn": "sgc-datawarehouse-privatednszone-dev.postgres.database.azure.com.",
+                "host_name": "azureprivatedns.net",
+                "minimum_ttl": 10,
+                "refresh_time": 3600,
+                "retry_time": 300,
+                "serial_number": 1,
+                "tags": {},
+                "ttl": 3600
+              }
+            ],
+            "tags": {},
+            "timeouts": null
+          },
+          "sensitive_attributes": [],
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjoxODAwMDAwMDAwMDAwLCJkZWxldGUiOjE4MDAwMDAwMDAwMDAsInJlYWQiOjMwMDAwMDAwMDAwMCwidXBkYXRlIjoxODAwMDAwMDAwMDAwfX0=",
+          "dependencies": [
+            "module.resource_group.azurerm_resource_group.azurerm_resource_group"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.private_dns_zone_vnet",
+      "mode": "managed",
+      "type": "azurerm_private_dns_zone_virtual_network_link",
+      "name": "azurerm_private_dns_zone_virtual_network_link",
+      "provider": "provider[\"registry.terraform.io/hashicorp/azurerm\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "id": "/subscriptions/cb4efa9d-9e95-4dbd-b4f9-908d51482781/resourceGroups/sgc-dataWarehouse-rg-dev/providers/Microsoft.Network/privateDnsZones/sgc-datawarehouse-privatednszone-dev.postgres.database.azure.com/virtualNetworkLinks/sgc-datawarehouse-pdns-dev",
+            "name": "sgc-datawarehouse-pdns-dev",
+            "private_dns_zone_name": "sgc-datawarehouse-privatednszone-dev.postgres.database.azure.com",
+            "registration_enabled": false,
+            "resource_group_name": "sgc-dataWarehouse-rg-dev",
+            "tags": {},
+            "timeouts": null,
+            "virtual_network_id": "/subscriptions/cb4efa9d-9e95-4dbd-b4f9-908d51482781/resourceGroups/sgc-dataWarehouse-rg-dev/providers/Microsoft.Network/virtualNetworks/sgc-dataWarehouse-vnet-dev"
+          },
+          "sensitive_attributes": [],
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjoxODAwMDAwMDAwMDAwLCJkZWxldGUiOjE4MDAwMDAwMDAwMDAsInJlYWQiOjMwMDAwMDAwMDAwMCwidXBkYXRlIjoxODAwMDAwMDAwMDAwfX0=",
+          "dependencies": [
+            "module.private_dns_zone.azurerm_private_dns_zone.azurerm_private_dns_zone",
+            "module.resource_group.azurerm_resource_group.azurerm_resource_group",
+            "module.vnet.azurerm_virtual_network.azurerm_virtual_network"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.resource_group",
+      "mode": "managed",
+      "type": "azurerm_resource_group",
+      "name": "azurerm_resource_group",
+      "provider": "provider[\"registry.terraform.io/hashicorp/azurerm\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "id": "/subscriptions/cb4efa9d-9e95-4dbd-b4f9-908d51482781/resourceGroups/sgc-dataWarehouse-rg-dev",
+            "location": "canadacentral",
+            "managed_by": "",
+            "name": "sgc-dataWarehouse-rg-dev",
+            "tags": {},
+            "timeouts": null
+          },
+          "sensitive_attributes": [],
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjo1NDAwMDAwMDAwMDAwLCJkZWxldGUiOjU0MDAwMDAwMDAwMDAsInJlYWQiOjMwMDAwMDAwMDAwMCwidXBkYXRlIjo1NDAwMDAwMDAwMDAwfX0="
+        }
+      ]
+    },
+    {
+      "module": "module.service_plan",
+      "mode": "managed",
+      "type": "azurerm_app_service_plan",
+      "name": "azurerm_app_service_plan",
+      "provider": "provider[\"registry.terraform.io/hashicorp/azurerm\"]",
+      "instances": [
+        {
+          "schema_version": 1,
+          "attributes": {
+            "app_service_environment_id": "",
+            "id": "/subscriptions/cb4efa9d-9e95-4dbd-b4f9-908d51482781/resourceGroups/sgc-dataWarehouse-rg-dev/providers/Microsoft.Web/serverFarms/sgc-dataWarehouse-serviceplan-dev",
+            "is_xenon": false,
+            "kind": "Windows",
+            "location": "canadacentral",
+            "maximum_elastic_worker_count": 1,
+            "maximum_number_of_workers": 10,
+            "name": "sgc-dataWarehouse-serviceplan-dev",
+            "per_site_scaling": false,
+            "reserved": false,
+            "resource_group_name": "sgc-dataWarehouse-rg-dev",
+            "sku": [
+              {
+                "capacity": 1,
+                "size": "S1",
+                "tier": "Standard"
+              }
+            ],
+            "tags": {},
+            "timeouts": null,
+            "zone_redundant": false
+          },
+          "sensitive_attributes": [],
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjozNjAwMDAwMDAwMDAwLCJkZWxldGUiOjM2MDAwMDAwMDAwMDAsInJlYWQiOjMwMDAwMDAwMDAwMCwidXBkYXRlIjozNjAwMDAwMDAwMDAwfSwic2NoZW1hX3ZlcnNpb24iOiIxIn0=",
+          "dependencies": [
+            "module.resource_group.azurerm_resource_group.azurerm_resource_group"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.storage_account",
+      "mode": "managed",
+      "type": "azurerm_storage_account",
+      "name": "azurerm_storage_account",
+      "provider": "provider[\"registry.terraform.io/hashicorp/azurerm\"]",
+      "instances": [
+        {
+          "schema_version": 4,
+          "attributes": {
+            "access_tier": "Hot",
+            "account_kind": "StorageV2",
+            "account_replication_type": "LRS",
+            "account_tier": "Standard",
+            "allow_nested_items_to_be_public": true,
+            "allowed_copy_scope": "",
+            "azure_files_authentication": [],
+            "blob_properties": [
+              {
+                "change_feed_enabled": false,
+                "change_feed_retention_in_days": 0,
+                "container_delete_retention_policy": [],
+                "cors_rule": [],
+                "default_service_version": "",
+                "delete_retention_policy": [],
+                "last_access_time_enabled": false,
+                "restore_policy": [],
+                "versioning_enabled": false
+              }
+            ],
+            "cross_tenant_replication_enabled": false,
+            "custom_domain": [],
+            "customer_managed_key": [],
+            "default_to_oauth_authentication": false,
+            "dns_endpoint_type": "Standard",
+            "edge_zone": "",
+            "https_traffic_only_enabled": true,
+            "id": "/subscriptions/cb4efa9d-9e95-4dbd-b4f9-908d51482781/resourceGroups/sgc-dataWarehouse-rg-dev/providers/Microsoft.Storage/storageAccounts/sgcdatawarehousesadev",
+            "identity": [],
+            "immutability_policy": [],
+            "infrastructure_encryption_enabled": false,
+            "is_hns_enabled": false,
+            "large_file_share_enabled": false,
+            "local_user_enabled": true,
+            "location": "canadacentral",
+            "min_tls_version": "TLS1_2",
+            "name": "sgcdatawarehousesadev",
+            "network_rules": [],
+            "nfsv3_enabled": false,
+            "primary_access_key": "d0xSATA5ful9NSiLfSwVFtdAOaWP6yYrRbBpgBFm+OtwRBdzAT8mOaHNNHBznvzeDGbQ+6t/Us0S+ASt0AeOkQ==",
+            "primary_blob_connection_string": "DefaultEndpointsProtocol=https;BlobEndpoint=https://sgcdatawarehousesadev.blob.core.windows.net/;AccountName=sgcdatawarehousesadev;AccountKey=d0xSATA5ful9NSiLfSwVFtdAOaWP6yYrRbBpgBFm+OtwRBdzAT8mOaHNNHBznvzeDGbQ+6t/Us0S+ASt0AeOkQ==",
+            "primary_blob_endpoint": "https://sgcdatawarehousesadev.blob.core.windows.net/",
+            "primary_blob_host": "sgcdatawarehousesadev.blob.core.windows.net",
+            "primary_blob_internet_endpoint": "",
+            "primary_blob_internet_host": "",
+            "primary_blob_microsoft_endpoint": "",
+            "primary_blob_microsoft_host": "",
+            "primary_connection_string": "DefaultEndpointsProtocol=https;AccountName=sgcdatawarehousesadev;AccountKey=d0xSATA5ful9NSiLfSwVFtdAOaWP6yYrRbBpgBFm+OtwRBdzAT8mOaHNNHBznvzeDGbQ+6t/Us0S+ASt0AeOkQ==;EndpointSuffix=core.windows.net",
+            "primary_dfs_endpoint": "https://sgcdatawarehousesadev.dfs.core.windows.net/",
+            "primary_dfs_host": "sgcdatawarehousesadev.dfs.core.windows.net",
+            "primary_dfs_internet_endpoint": "",
+            "primary_dfs_internet_host": "",
+            "primary_dfs_microsoft_endpoint": "",
+            "primary_dfs_microsoft_host": "",
+            "primary_file_endpoint": "https://sgcdatawarehousesadev.file.core.windows.net/",
+            "primary_file_host": "sgcdatawarehousesadev.file.core.windows.net",
+            "primary_file_internet_endpoint": "",
+            "primary_file_internet_host": "",
+            "primary_file_microsoft_endpoint": "",
+            "primary_file_microsoft_host": "",
+            "primary_location": "canadacentral",
+            "primary_queue_endpoint": "https://sgcdatawarehousesadev.queue.core.windows.net/",
+            "primary_queue_host": "sgcdatawarehousesadev.queue.core.windows.net",
+            "primary_queue_microsoft_endpoint": "",
+            "primary_queue_microsoft_host": "",
+            "primary_table_endpoint": "https://sgcdatawarehousesadev.table.core.windows.net/",
+            "primary_table_host": "sgcdatawarehousesadev.table.core.windows.net",
+            "primary_table_microsoft_endpoint": "",
+            "primary_table_microsoft_host": "",
+            "primary_web_endpoint": "https://sgcdatawarehousesadev.z9.web.core.windows.net/",
+            "primary_web_host": "sgcdatawarehousesadev.z9.web.core.windows.net",
+            "primary_web_internet_endpoint": "",
+            "primary_web_internet_host": "",
+            "primary_web_microsoft_endpoint": "",
+            "primary_web_microsoft_host": "",
+            "public_network_access_enabled": true,
+            "queue_encryption_key_type": "Service",
+            "queue_properties": [
+              {
+                "cors_rule": [],
+                "hour_metrics": [
+                  {
+                    "enabled": true,
+                    "include_apis": true,
+                    "retention_policy_days": 7,
+                    "version": "1.0"
+                  }
+                ],
+                "logging": [
+                  {
+                    "delete": false,
+                    "read": false,
+                    "retention_policy_days": 0,
+                    "version": "1.0",
+                    "write": false
+                  }
+                ],
+                "minute_metrics": [
+                  {
+                    "enabled": false,
+                    "include_apis": false,
+                    "retention_policy_days": 0,
+                    "version": "1.0"
+                  }
+                ]
+              }
+            ],
+            "resource_group_name": "sgc-dataWarehouse-rg-dev",
+            "routing": [],
+            "sas_policy": [],
+            "secondary_access_key": "D3oQkH21mekwzy9zA1ehNcgFOR6LmPLnQg9J4Oc5al8oyrkmucFSvo7wyqiYTpa5g58f304nT6CN+AStEVizCQ==",
+            "secondary_blob_connection_string": "",
+            "secondary_blob_endpoint": "",
+            "secondary_blob_host": "",
+            "secondary_blob_internet_endpoint": "",
+            "secondary_blob_internet_host": "",
+            "secondary_blob_microsoft_endpoint": "",
+            "secondary_blob_microsoft_host": "",
+            "secondary_connection_string": "DefaultEndpointsProtocol=https;AccountName=sgcdatawarehousesadev;AccountKey=D3oQkH21mekwzy9zA1ehNcgFOR6LmPLnQg9J4Oc5al8oyrkmucFSvo7wyqiYTpa5g58f304nT6CN+AStEVizCQ==;EndpointSuffix=core.windows.net",
+            "secondary_dfs_endpoint": "",
+            "secondary_dfs_host": "",
+            "secondary_dfs_internet_endpoint": "",
+            "secondary_dfs_internet_host": "",
+            "secondary_dfs_microsoft_endpoint": "",
+            "secondary_dfs_microsoft_host": "",
+            "secondary_file_endpoint": "",
+            "secondary_file_host": "",
+            "secondary_file_internet_endpoint": "",
+            "secondary_file_internet_host": "",
+            "secondary_file_microsoft_endpoint": "",
+            "secondary_file_microsoft_host": "",
+            "secondary_location": "",
+            "secondary_queue_endpoint": "",
+            "secondary_queue_host": "",
+            "secondary_queue_microsoft_endpoint": "",
+            "secondary_queue_microsoft_host": "",
+            "secondary_table_endpoint": "",
+            "secondary_table_host": "",
+            "secondary_table_microsoft_endpoint": "",
+            "secondary_table_microsoft_host": "",
+            "secondary_web_endpoint": "",
+            "secondary_web_host": "",
+            "secondary_web_internet_endpoint": "",
+            "secondary_web_internet_host": "",
+            "secondary_web_microsoft_endpoint": "",
+            "secondary_web_microsoft_host": "",
+            "sftp_enabled": false,
+            "share_properties": [
+              {
+                "cors_rule": [],
+                "retention_policy": [
+                  {
+                    "days": 7
+                  }
+                ],
+                "smb": []
+              }
+            ],
+            "shared_access_key_enabled": true,
+            "static_website": [],
+            "table_encryption_key_type": "Service",
+            "tags": {},
+            "timeouts": null
+          },
+          "sensitive_attributes": [
+            [
+              {
+                "type": "get_attr",
+                "value": "secondary_blob_connection_string"
+              }
+            ],
+            [
+              {
+                "type": "get_attr",
+                "value": "secondary_connection_string"
+              }
+            ],
+            [
+              {
+                "type": "get_attr",
+                "value": "primary_connection_string"
+              }
+            ],
+            [
+              {
+                "type": "get_attr",
+                "value": "primary_access_key"
+              }
+            ],
+            [
+              {
+                "type": "get_attr",
+                "value": "primary_blob_connection_string"
+              }
+            ],
+            [
+              {
+                "type": "get_attr",
+                "value": "secondary_access_key"
+              }
+            ]
+          ],
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjozNjAwMDAwMDAwMDAwLCJkZWxldGUiOjM2MDAwMDAwMDAwMDAsInJlYWQiOjMwMDAwMDAwMDAwMCwidXBkYXRlIjozNjAwMDAwMDAwMDAwfSwic2NoZW1hX3ZlcnNpb24iOiI0In0=",
+          "dependencies": [
+            "module.resource_group.azurerm_resource_group.azurerm_resource_group"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.subnet",
+      "mode": "managed",
+      "type": "azurerm_subnet",
+      "name": "azurerm_subnet",
+      "provider": "provider[\"registry.terraform.io/hashicorp/azurerm\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "address_prefixes": [
+              "10.0.1.0/24"
+            ],
+            "default_outbound_access_enabled": true,
+            "delegation": [
+              {
+                "name": "sgc-dataWarehouse-subnetDelegation-dev",
+                "service_delegation": [
+                  {
+                    "actions": [
+                      "Microsoft.Network/virtualNetworks/subnets/join/action"
+                    ],
+                    "name": "Microsoft.DBforPostgreSQL/flexibleServers"
+                  }
+                ]
+              }
+            ],
+            "id": "/subscriptions/cb4efa9d-9e95-4dbd-b4f9-908d51482781/resourceGroups/sgc-dataWarehouse-rg-dev/providers/Microsoft.Network/virtualNetworks/sgc-dataWarehouse-vnet-dev/subnets/sgc-dataWarehouse-subnet-dev",
+            "name": "sgc-dataWarehouse-subnet-dev",
+            "private_endpoint_network_policies": "Disabled",
+            "private_link_service_network_policies_enabled": true,
+            "resource_group_name": "sgc-dataWarehouse-rg-dev",
+            "service_endpoint_policy_ids": [],
+            "service_endpoints": [],
+            "timeouts": null,
+            "virtual_network_name": "sgc-dataWarehouse-vnet-dev"
+          },
+          "sensitive_attributes": [],
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjoxODAwMDAwMDAwMDAwLCJkZWxldGUiOjE4MDAwMDAwMDAwMDAsInJlYWQiOjMwMDAwMDAwMDAwMCwidXBkYXRlIjoxODAwMDAwMDAwMDAwfX0=",
+          "dependencies": [
+            "module.resource_group.azurerm_resource_group.azurerm_resource_group",
+            "module.vnet.azurerm_virtual_network.azurerm_virtual_network"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.vnet",
+      "mode": "managed",
+      "type": "azurerm_virtual_network",
+      "name": "azurerm_virtual_network",
+      "provider": "provider[\"registry.terraform.io/hashicorp/azurerm\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "address_space": [
+              "10.0.0.0/16"
+            ],
+            "bgp_community": "",
+            "ddos_protection_plan": [],
+            "dns_servers": [],
+            "edge_zone": "",
+            "encryption": [],
+            "flow_timeout_in_minutes": 0,
+            "guid": "dbaead12-7910-419a-bd98-fd0f3113dd76",
+            "id": "/subscriptions/cb4efa9d-9e95-4dbd-b4f9-908d51482781/resourceGroups/sgc-dataWarehouse-rg-dev/providers/Microsoft.Network/virtualNetworks/sgc-dataWarehouse-vnet-dev",
+            "location": "canadacentral",
+            "name": "sgc-dataWarehouse-vnet-dev",
+            "resource_group_name": "sgc-dataWarehouse-rg-dev",
+            "subnet": [
+              {
+                "address_prefixes": [
+                  "10.0.1.0/24"
+                ],
+                "default_outbound_access_enabled": true,
+                "delegation": [
+                  {
+                    "name": "sgc-dataWarehouse-subnetDelegation-dev",
+                    "service_delegation": [
+                      {
+                        "actions": [
+                          "Microsoft.Network/virtualNetworks/subnets/join/action"
+                        ],
+                        "name": "Microsoft.DBforPostgreSQL/flexibleServers"
+                      }
+                    ]
+                  }
+                ],
+                "id": "/subscriptions/cb4efa9d-9e95-4dbd-b4f9-908d51482781/resourceGroups/sgc-dataWarehouse-rg-dev/providers/Microsoft.Network/virtualNetworks/sgc-dataWarehouse-vnet-dev/subnets/sgc-dataWarehouse-subnet-dev",
+                "name": "sgc-dataWarehouse-subnet-dev",
+                "private_endpoint_network_policies": "Disabled",
+                "private_link_service_network_policies_enabled": true,
+                "route_table_id": "",
+                "security_group": "",
+                "service_endpoint_policy_ids": [],
+                "service_endpoints": []
+              }
+            ],
+            "tags": {},
+            "timeouts": null
+          },
+          "sensitive_attributes": [],
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjoxODAwMDAwMDAwMDAwLCJkZWxldGUiOjE4MDAwMDAwMDAwMDAsInJlYWQiOjMwMDAwMDAwMDAwMCwidXBkYXRlIjoxODAwMDAwMDAwMDAwfX0=",
+          "dependencies": [
+            "module.resource_group.azurerm_resource_group.azurerm_resource_group"
+          ]
+        }
+      ]
+    }
+  ],
+  "check_results": null
+}

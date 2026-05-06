@@ -1,0 +1,38 @@
+# LangChain core and community packages
+langchain
+langchain-community
+langchain-openai
+langchain-chroma
+
+# Document loaders
+unstructured[local-inference]  # Includes support for complex PDFs, HEIF images, etc.
+pdfminer.six                   # Required by some PDF loaders
+python-docx                    # For loading .docx files
+PyMuPDF                        # Optional but speeds up some PDF operations
+
+# OpenAI and embeddings
+openai
+
+# Vectorstore persistence and embeddings
+chromadb
+
+# Environment variables
+python-dotenv
+
+Flask==2.3.2
+Flask-Cors==3.0.10
+Flask-Session==0.4.0
+langchain==0.1.14
+langchain-openai==0.1.2
+openai==1.23.2
+chromadb==0.4.22
+pymupdf==1.23.9
+python-docx==1.1.0
+python-dotenv==1.0.1
+werkzeug==2.3.7
+pandas==2.2.2
+openpyxl==3.1.2
+requests==2.31.0
+beautifulsoup4==4.12.3
+azure-storage-blob==12.19.1
+tqdm==4.66.2

@@ -1,0 +1,22 @@
+# Use Python 3.9 slim image as the base
+FROM python:3.9-slim
+
+# Set the working directory
+WORKDIR /app
+
+# Create necessary directories
+RUN mkdir -p /app/data
+
+# Copy requirements first to leverage Docker cache
+COPY requirements.txt /app/
+RUN pip install -r requirements.txt --no-cache-dir
+
+# Copy application files
+COPY Web/ /app/Web/
+#COPY canvas_knowledgebase/ /app/canvas_knowledgebase/
+
+# Expose the port the app runs on
+EXPOSE 5000
+
+# Run the preprocessing script and then start the app
+CMD ["sh", "-c", "python canvas_knowledgebase/canvas_grad_knowledge_base/store_files_grad_chromadb.py && python Web/app_grad.py"]

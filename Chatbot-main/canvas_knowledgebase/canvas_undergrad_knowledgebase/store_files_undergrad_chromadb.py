@@ -1,0 +1,285 @@
+import os
+import tempfile
+import requests
+from bs4 import BeautifulSoup
+# Removed global PyMuPDF import to avoid potential segfaults when processing PDFs
+from docx import Document as DocxDocument
+import pandas as pd
+from azure.storage.blob import ContainerClient
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain.schema import Document
+from langchain.vectorstores import Chroma
+from langchain.embeddings import OpenAIEmbeddings
+import shutil
+import os
+
+# # === CONFIGURATION ===
+#ACCESS_TOKEN = '1721~PrTy6VJv3R9DeFw6BUZuH4DMfGJwmCAETT8yUnr8NzR4TErvZ7mBMuNtAeFyrkx8'
+BASE_URL = 'https://yu.instructure.com/api/v1'
+course_id = '23144'
+#AZURE_CONNECTION_STRING = "DefaultEndpointsProtocol=https;AccountName=canvasfaq;AccountKey=GDK22ZLFfHKo+oPuOsAMUDGEWTZg5qdbs+hacV1Kjhu8NPKgP3D06MY3U8tysbr9UhJNfnyJWYPJ+AStOyF9Dw==;EndpointSuffix=core.windows.net"
+AZURE_CONTAINER_NAME = "faq"
+AZURE_CONTAINER_NAME1 = "metadata"
+#os.environ["OPENAI_API_KEY"] = "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"
+
+headers = {'Authorization': f'Bearer {ACCESS_TOKEN}'}
+
+
+
+import openpyxl
+from azure.storage.blob import ContainerClient
+from langchain.schema import Document  # or your own Document class
+import tempfile
+import os
+
+def extract_text_from_azure_blob():
+    print("📦 Connecting to Azure Blob container...")
+    documents = []
+    container_client = ContainerClient.from_connection_string(AZURE_CONNECTION_STRING, AZURE_CONTAINER_NAME)
+
+    for blob in container_client.list_blobs():
+        print(f"🔍 Found blob: {blob.name}")
+        blob_client = container_client.get_blob_client(blob.name)
+
+        with tempfile.NamedTemporaryFile(delete=False, suffix=".xlsx") as temp_file:
+            blob_data = blob_client.download_blob().readall()
+            temp_file.write(blob_data)
+            temp_path = temp_file.name
+
+        extracted_entries = []
+
+        if blob.name.endswith(".xlsx"):
+            try:
+                wb = openpyxl.load_workbook(temp_path, data_only=True)
+                ws = wb.active
+                headers = [cell.value for cell in next(ws.iter_rows(min_row=1, max_row=1))]
+                
+                q_idx = headers.index("Question") if "Question" in headers else None
+                a_idx = headers.index("Answer") if "Answer" in headers else None
+
+                if q_idx is None or a_idx is None:
+                    print(f"⚠️ Required columns not found in: {blob.name}")
+                    continue
+
+                for row in ws.iter_rows(min_row=2):
+                    question = str(row[q_idx].value or "").strip()
+
+                    answer_cell = row[a_idx]
+                    answer = ""
+
+                    # Prefer hyperlink if exists
+                    if answer_cell.hyperlink:
+                        answer = answer_cell.hyperlink.target
+                    elif answer_cell.value is not None:
+                        answer = str(answer_cell.value).strip()
+
+                    if question and answer:
+                        extracted_entries.append(f"Question: {question}\nAnswer: {answer}")
+
+            except Exception as e:
+                print(f"❌ Failed to process Excel file {blob.name}: {e}")
+            finally:
+                wb.close()
+
+        os.unlink(temp_path)
+
+        if extracted_entries:
+            joined_text = "\n\n".join(extracted_entries)
+            documents.append(Document(page_content=joined_text, metadata={"source": f"azure_blob:{blob.name}"}))
+        else:
+            print(f"⚠️ No content extracted from: {blob.name}")
+
+    return documents
+
+    
+def extract_text_from_azure_blob_Csv():
+    print("📦 Connecting to Azure Blob container for CSV metadata...")
+    documents = []
+    container_client = ContainerClient.from_connection_string(AZURE_CONNECTION_STRING, AZURE_CONTAINER_NAME1)
+
+    for blob in container_client.list_blobs():
+        if "yeshiva_undergraduate_canvas.csv" not in blob.name.lower():
+            continue  # Skip unrelated files
+
+        print(f"🔍 Found target blob: {blob.name}")
+        blob_client = container_client.get_blob_client(blob.name)
+
+        with tempfile.NamedTemporaryFile(delete=False) as temp_file:
+            blob_data = blob_client.download_blob().readall()
+            temp_file.write(blob_data)
+            temp_path = temp_file.name
+
+        try:
+            df = pd.read_csv(temp_path)
+            print(f"🧪 Columns in {blob.name}: {df.columns.tolist()}")
+            print(f"📏 Rows found: {len(df)}")
+
+            # Generate readable text per row
+            extracted_text = "\n\n".join(
+                f"File: {row['File Name']} ({row['File Type']}, {row['Size (KB)']} KB)\n"
+                f"Folder: {row['Folder']}\n"
+                f"Link: {row['Canvas File URL']}"
+                for _, row in df.iterrows()
+                if 'File Name' in row and 'File Type' in row and 'Size (KB)' in row and 'Folder' in row and 'Canvas File URL' in row
+            )
+
+            if extracted_text.strip():
+                documents.append(Document(
+                    page_content=extracted_text.strip(),
+                    metadata={"source": f"azure_blob:{blob.name}"}
+                ))
+            else:
+                print(f"⚠️ No usable content in: {blob.name}")
+
+        except Exception as e:
+            print(f"❌ Failed to process CSV {blob.name}: {e}")
+        finally:
+            os.unlink(temp_path)
+
+    return documents
+
+    
+
+def extract_file_links(html_body):
+    soup = BeautifulSoup(html_body, 'html.parser')
+    file_links = []
+    for a in soup.find_all('a', class_='instructure_file_link'):
+        api_endpoint = a.get('data-api-endpoint')
+        if api_endpoint:
+            try:
+                response = requests.get(api_endpoint, headers=headers)
+                if response.status_code == 200:
+                    data = response.json()
+                    url = data.get('url')
+                    filename = data.get('display_name', 'unknown')
+                    if url:
+                        file_links.append({"url": url, "filename": filename})
+            except Exception as e:
+                print(f"Error accessing {api_endpoint}: {e}")
+    return file_links
+
+def download_and_extract_text_from_canvas_file(file_info):
+    # Skip PDF extraction to avoid PyMuPDF-related crashes; HTML page text is handled separately
+    ext = file_info.get("filename", "").split('.')[-1].lower()
+    if ext == "pdf":
+        print(f"⚠️ Skipping PDF extraction for {file_info.get('filename')} (avoiding PyMuPDF)")
+        return ""
+    try:
+        response = requests.get(file_info["url"])
+        if response.status_code != 200:
+            return ""
+
+        with tempfile.NamedTemporaryFile(delete=False) as f:
+            f.write(response.content)
+            file_path = f.name
+
+        ext = file_info["filename"].split(".")[-1].lower()
+        text = ""
+
+        if ext == "pdf":
+            doc = fitz.open(file_path)
+            text = "".join([page.get_text() for page in doc])
+            doc.close()
+        elif ext == "docx":
+            doc = DocxDocument(file_path)
+            text = "\n".join([p.text for p in doc.paragraphs])
+        elif ext == "txt":
+            with open(file_path, "r", encoding="utf-8", errors="ignore") as f:
+                text = f.read()
+
+        os.unlink(file_path)
+        return text.strip()
+    except Exception as e:
+        return f"[Error extracting {file_info['filename']}: {e}]"
+
+def clean_html(raw_html):
+    soup = BeautifulSoup(raw_html, 'html.parser')
+    return soup.get_text(separator="\n")
+
+# === FETCH CANVAS CONTENT ===
+canvas_chunks = []
+modules_url = f'{BASE_URL}/courses/{course_id}/modules?include=items'
+response = requests.get(modules_url, headers=headers)
+canvas_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
+
+if response.status_code == 200:
+    modules = response.json()
+    for module in modules:
+        for item in module.get('items', []):
+            title = item.get('title')
+            page_url = item.get('page_url')
+            if not page_url:
+                continue
+
+            page_api_url = f"{BASE_URL}/courses/{course_id}/pages/{page_url}"
+            page_response = requests.get(page_api_url, headers=headers)
+
+            if page_response.status_code == 200:
+                page_data = page_response.json()
+                body = page_data.get('body', '')
+                file_links = extract_file_links(body)
+                has_content = False
+
+                for file_info in file_links:
+                    text = download_and_extract_text_from_canvas_file(file_info)
+                    if text.strip():
+                        chunks = canvas_splitter.split_text(text)
+                        for chunk in chunks:
+                            canvas_chunks.append(Document(page_content=chunk, metadata={"source": file_info['filename']}))
+                        has_content = True
+
+                cleaned = clean_html(body)
+                if cleaned.strip():
+                    chunks = canvas_splitter.split_text(cleaned)
+                    for chunk in chunks:
+                        canvas_chunks.append(Document(page_content=chunk, metadata={"source": "canvas_page", "title": title}))
+                    has_content = True
+
+                if not has_content:
+                    # Save at least the title if no other content
+                    canvas_chunks.append(Document(page_content=f"No content found on page: {title}", metadata={"source": "canvas_page", "title": title}))
+
+# === FETCH AZURE ===
+
+faq_docs = extract_text_from_azure_blob()
+csv_docs = extract_text_from_azure_blob_Csv()
+faq_docs.extend(csv_docs)
+
+faq_chunks = []
+faq_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
+
+for doc in faq_docs:
+    if not doc.page_content.strip():
+        print(f"⚠️ Skipping empty document from: {doc.metadata.get('source')}")
+        continue
+    chunks = faq_splitter.split_text(doc.page_content)
+    for chunk in chunks:
+        if chunk.strip():
+            faq_chunks.append(Document(page_content=chunk, metadata=doc.metadata))
+
+# === SAVE VECTORSTORES ===
+# Determine project root and Web vectorstore directories
+script_dir = os.path.dirname(os.path.abspath(__file__))
+project_root = os.path.abspath(os.path.join(script_dir, os.pardir, os.pardir))
+web_dir = os.path.join(project_root, "Web")
+faq_store_dir = os.path.join(web_dir, "faq_vectorStore")
+canvas_store_dir = os.path.join(web_dir, "undergraduate_vectorStore")
+
+# Ensure target directories exist (clean previous stores if present)
+if faq_chunks:
+    print(f"✅ FAQ Chunks: {len(faq_chunks)}")
+    if os.path.exists(faq_store_dir):
+        shutil.rmtree(faq_store_dir)
+    Chroma.from_documents(faq_chunks, OpenAIEmbeddings(), persist_directory=faq_store_dir)
+    print(f"✅ FAQ vectorstore saved to {faq_store_dir}.")
+else:
+    print("⚠️ No FAQ content to save.")
+
+if canvas_chunks:
+    print(f"✅ Canvas Chunks: {len(canvas_chunks)}")
+    if os.path.exists(canvas_store_dir):
+        shutil.rmtree(canvas_store_dir)
+    Chroma.from_documents(canvas_chunks, OpenAIEmbeddings(), persist_directory=canvas_store_dir)
+    print(f"✅ Canvas vectorstore saved to {canvas_store_dir}.")
+else:
+    print("⚠️ No valid Canvas content found.")
