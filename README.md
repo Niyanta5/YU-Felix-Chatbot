@@ -2,7 +2,7 @@
 
 Canvas Chatbot is an AI-powered Retrieval-Augmented Generation (RAG) assistant built to help Yeshiva University students quickly access academic and Canvas-related support. The system combines document ingestion, semantic search, and LLM-based response generation to answer questions about Canvas navigation, course materials, assignments, FAQs, and student resources through a simple chat interface.
 
-Built with a forward-deployed engineering mindset, this project focuses on solving a real student workflow problem by connecting scattered academic resources into one accessible AI assistant.
+This project focuses on solving a real student workflow problem by connecting scattered academic resources into one accessible AI assistant.
 
 ---
 
