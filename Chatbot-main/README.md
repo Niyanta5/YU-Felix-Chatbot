@@ -1,5 +1,4 @@
-<<<<<<< HEAD
-# Canvas-Chatbot
+# YU Canvas-Chatbot
 <!--
   README for Canvas Chatbot
 -->
